@@ -2,27 +2,6 @@
 #include <stdlib.h>
 #include <xmp.h>
 
-/** Ripe bannanas 
- * xmp_set_row
- * xmp_inject_event
- * 
- * xmp_play_buffer
- * xmp_get_player
- */ 
-
- /** Unripe bannans:
-  * xmp_next_position
-  * xmp_prev_position
-  * 
-  * xmp_set_tempo_factor
-  * xmp_set_instrument_path
-  * 
-  * xmp_stop_module
-  * xmp_restart_module
-  * 
-  * xmp_channel_mute
-  */
-
 #define MAX_SEEKS 50
 
 int pick_time(int duration) {
@@ -32,7 +11,6 @@ int pick_time(int duration) {
     return rand_num;
 }
 
-// gcc harness_1.c -o harness_1 -I../include ../src/libxmp/.libs/libxmp.a -lm
 int main(int argc, char **argv)
 {
     srand(1234);
@@ -48,12 +26,9 @@ int main(int argc, char **argv)
     event.fxt = 0x0c;
     event.fxp = 0x20;
 
-
-    /***** FROM ARGV *****/
     c = xmp_create_context();
 
     if (xmp_load_module(c, argv[1]) != 0) {
-        //fprintf(stderr, "can't load module\n");
         exit(EXIT_FAILURE);
     }
 
@@ -80,11 +55,11 @@ int main(int argc, char **argv)
         
         if (num_seeks < MAX_SEEKS) {
             rand_time = pick_time(mi.total_time);
-            xmp_seek_time(c, rand_time); // time in milliseconds
+            xmp_seek_time(c, rand_time); 
             num_seeks++;
         }
         
-        if (mi.loop_count > 0)    /* exit before looping */
+        if (mi.loop_count > 0)  
         break;
     }
     
@@ -94,6 +69,6 @@ int main(int argc, char **argv)
     xmp_channel_mute(c,0,1);
     xmp_get_player(c, XMP_PLAYER_CFLAGS);
     xmp_end_player(c);
-    xmp_release_module(c);        /* unload module */
+    xmp_release_module(c);       
     xmp_free_context(c);
 }
